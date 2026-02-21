@@ -23,10 +23,13 @@ const verifyTurnstile = async (token) => {
   return data.success === true
 }
 
+const VALID_ID_TYPES = ['CC', 'PS', 'CE']
+
 const validatePayload = (body) => {
   if (!body || typeof body !== 'object') return { valid: false, error: 'Invalid payload' }
-  const { fullName, idNumber, email, phone, address, companyIds, turnstileToken } = body
+  const { fullName, idType, idNumber, email, phone, address, companyIds, turnstileToken } = body
   if (!fullName?.trim()) return { valid: false, error: 'fullName required' }
+  if (!idType || !VALID_ID_TYPES.includes(idType)) return { valid: false, error: 'idType required or invalid' }
   if (!idNumber?.trim()) return { valid: false, error: 'idNumber required' }
   if (!email?.trim()) return { valid: false, error: 'email required' }
   if (!phone?.trim()) return { valid: false, error: 'phone required' }
@@ -63,6 +66,7 @@ const handler = async (event, context) => {
 
   const userData = {
     fullName: body.fullName,
+    idType: body.idType || 'CC',
     idNumber: body.idNumber,
     email: body.email,
     phone: body.phone,

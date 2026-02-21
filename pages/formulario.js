@@ -12,8 +12,15 @@ import Head from 'next/head'
 
 const FORM_STORAGE_KEY = 'cerollamadas_form_data'
 
+const ID_TYPE_OPTIONS = [
+  { value: 'CC', label: 'Cédula de Ciudadanía' },
+  { value: 'PS', label: 'Pasaporte' },
+  { value: 'CE', label: 'Cédula de Extranjería' },
+]
+
 const initialForm = {
   fullName: '',
+  idType: 'CC',
   idNumber: '',
   email: '',
   phone: '',
@@ -37,6 +44,8 @@ const Formulario = () => {
   const validate = () => {
     const next = {}
     if (!form.fullName?.trim()) next.fullName = 'Requerido'
+    const validIdTypes = ['CC', 'PS', 'CE']
+    if (!form.idType || !validIdTypes.includes(form.idType)) next.idType = 'Requerido'
     if (!form.idNumber?.trim()) next.idNumber = 'Requerido'
     if (!form.email?.trim()) next.email = 'Requerido'
     if (!form.phone?.trim()) next.phone = 'Requerido'
@@ -51,15 +60,15 @@ const Formulario = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (!turnstileToken) {
+    /* if (!turnstileToken) {
       alert("Por favor verifica que eres humano.");
       return;
     }
 
     alert("Formulario enviado correctamente.");
-    return;
+    return; */
 
-    /* if (!validate()) return
+    if (!validate()) return
 
     const payload = {
       ...form,
@@ -68,7 +77,7 @@ const Formulario = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(payload))
     }
-    router.push('/preview') */
+    router.push('/preview')
   }
 
   return (
@@ -93,7 +102,7 @@ const Formulario = () => {
               <CardHeader>
                 <h2 className="text-lg font-semibold">Datos personales</h2>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="input-full-name">Nombre completo</Label>
                   <Input
@@ -108,6 +117,29 @@ const Formulario = () => {
                   {errors.fullName && (
                     <p className="text-sm text-destructive" role="alert">
                       {errors.fullName}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="input-type-document">Tipo de documento</Label>
+                  <select
+                    id="input-type-document"
+                    data-testid="input-type-document"
+                    value={form.idType}
+                    onChange={(e) => update('idType', e.target.value)}
+                    aria-required="true"
+                    aria-invalid={!!errors.idType}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {ID_TYPE_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.idType && (
+                    <p className="text-sm text-destructive" role="alert">
+                      {errors.idType}
                     </p>
                   )}
                 </div>
