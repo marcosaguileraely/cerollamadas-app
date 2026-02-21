@@ -1,8 +1,3 @@
-/**
- * This file may contain code that uses generative AI for code assistance, unit testing and/or entire functions.
- * The generative model(s) used may be a combination of GitHub Copilot, OpenAI ChatGPT or others.
- */
-
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { buildEmailBody } from '@/lib/emailTemplate'
 import { getCompaniesForCountry } from '@/lib/companies'

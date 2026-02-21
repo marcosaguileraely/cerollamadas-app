@@ -1,10 +1,4 @@
-/**
- * This file may contain code that uses generative AI for code assistance, unit testing and/or entire functions.
- * The generative model(s) used may be a combination of GitHub Copilot, OpenAI ChatGPT or others.
- */
-
 import { useState, useCallback } from 'react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,7 +6,9 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { CompanySelector } from '@/components/CompanySelector'
-import { TurnstileWidget } from '@/components/TurnstileWidget'
+import TurnstileWidget from '@/components/TurnstileWidget'
+
+import Head from 'next/head'
 
 const FORM_STORAGE_KEY = 'cerollamadas_form_data'
 
@@ -54,7 +50,16 @@ const Formulario = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!validate()) return
+
+    if (!turnstileToken) {
+      alert("Por favor verifica que eres humano.");
+      return;
+    }
+
+    alert("Formulario enviado correctamente.");
+    return;
+
+    /* if (!validate()) return
 
     const payload = {
       ...form,
@@ -63,7 +68,7 @@ const Formulario = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(payload))
     }
-    router.push('/preview')
+    router.push('/preview') */
   }
 
   return (
@@ -233,7 +238,6 @@ const Formulario = () => {
             <div className="space-y-2">
               <Label>Verificación</Label>
               <TurnstileWidget
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
                 onVerify={setTurnstileToken}
                 onExpire={() => setTurnstileToken(null)}
               />

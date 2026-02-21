@@ -1,8 +1,3 @@
-/**
- * This file may contain code that uses generative AI for code assistance, unit testing and/or entire functions.
- * The generative model(s) used may be a combination of GitHub Copilot, OpenAI ChatGPT or others.
- */
-
 const { companies } = require('../../lib/companies')
 const { buildEmailBody } = require('../../lib/emailTemplate')
 const { sendOne } = require('../../lib/mailgun')
